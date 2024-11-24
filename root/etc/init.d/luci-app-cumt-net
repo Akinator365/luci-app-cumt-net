@@ -1,0 +1,90 @@
+#!/bin/sh /etc/rc.common
+#
+# Init script for cumt-login
+#
+# SPDX-License-Identifier: GPL-3.0-only
+
+START=99
+USE_PROCD=1
+NAME=luci-app-cumt-net
+CONF=/etc/config/cumt-login
+PROG=/usr/bin/cumtnet
+TARGET_CONF=/tmp/cumt-login.conf
+
+start_service() {
+	local config_path="$CONF"
+    # 检查配置文件是否存在
+	if [ ! -f "$config_path" ]; then
+        	logger -t "$NAME" "配置文件 $config_path 不存在，无法启动服务"
+        	return 1
+        fi
+	# 确保 cumtnet 服务脚本存在
+	if [ -x "$PROG" ]; then
+        # 检查是否启用
+                local isrunning=$(uci get cumt-login.@cumt_login[0].enabled 2>/dev/null || echo 0)
+                if [ "$isrunning" == "1" ]; then
+                	copy_config  # 复制配置文件到目标路径
+			logger -t "$NAME" "Starting cumtnet service"
+			# 使用命令行参数启动服务
+                	#$PROG -config="$TARGET_CONF" &
+        # 使用 procd 管理服务
+        procd_open_instance
+        procd_set_param command "$PROG" -config="$TARGET_CONF"
+        #procd_set_param respawn  # 如果进程退出，则自动重启
+        procd_close_instance
+                	logger -t "$NAME" "enable=1，启动程序"
+                else
+                	logger -t "$NAME" "enabled=0，程序退出"
+                fi
+
+                else
+		logger -t "$NAME" "Error: cumtnet service script not found"
+	fi
+}
+
+stop_service() {
+    logger -t "$NAME" "Stopping service"
+
+    for pid in $(pgrep -f $PROG); do
+        kill -9 $pid || logger -t "$NAME" "Failed to kill process $pid"
+    done
+
+    sleep 1
+    if pgrep -f $PROG > /dev/null; then
+        logger -t "$NAME" "Failed to stop service"
+    else
+        echo service cumt-login stop!
+        logger -t "$NAME" "Service stopped successfully"
+    fi
+}
+
+copy_config() {
+    logger -t "$NAME" "正在复制配置文件到 $TARGET_CONF"
+    cp "$CONF" "$TARGET_CONF"
+    if [ $? -eq 0 ]; then
+        logger -t "$NAME" "配置文件复制成功"
+    else
+        logger -t "$NAME" "配置文件复制失败"
+    fi
+}
+
+reload_service() {
+  # 确保 cumtnet 服务脚本存在
+    logger -t "$NAME" "DEBUG: reload_service triggered"
+    # 检查是否启用
+    local isrunning=$(uci get cumt-login.@cumt_login[0].enabled 2>/dev/null || echo 0)
+
+    if [ "$isrunning" == "0" ]; then
+        logger -t "$NAME" "Service is disabled in configuration, stopping service"
+        stop_service
+    else
+        logger -t "$NAME" "Service is enabled in configuration, starting service"
+        start_service
+    fi
+
+}
+
+service_triggers() {
+    # 添加对 /etc/config/cumt-login 文件的监控
+    procd_add_reload_trigger cumt-login
+}
