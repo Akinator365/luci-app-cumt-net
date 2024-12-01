@@ -1,15 +1,15 @@
 #!/bin/sh /etc/rc.common
 #
-# Init script for cumt-login
+# Init script for cumt-net
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
 START=99
 USE_PROCD=1
 NAME=luci-app-cumt-net
-CONF=/etc/config/cumt-login
+CONF=/etc/config/cumt-net
 PROG=/usr/bin/cumtnet
-TARGET_CONF=/tmp/cumt-login.conf
+TARGET_CONF=/tmp/cumt-net.conf
 
 start_service() {
 	local config_path="$CONF"
@@ -21,7 +21,7 @@ start_service() {
 	# 确保 cumtnet 服务脚本存在
 	if [ -x "$PROG" ]; then
         # 检查是否启用
-                local isrunning=$(uci get cumt-login.@cumt_login[0].enabled 2>/dev/null || echo 0)
+                local isrunning=$(uci get cumt-net.@cumt_net[0].enabled 2>/dev/null || echo 0)
                 if [ "$isrunning" == "1" ]; then
                 	copy_config  # 复制配置文件到目标路径
 			logger -t "$NAME" "Starting cumtnet service"
@@ -53,7 +53,7 @@ stop_service() {
     if pgrep -f $PROG > /dev/null; then
         logger -t "$NAME" "Failed to stop service"
     else
-        echo service cumt-login stop!
+        echo service cumt-net stop!
         logger -t "$NAME" "Service stopped successfully"
     fi
 }
@@ -72,7 +72,7 @@ reload_service() {
   # 确保 cumtnet 服务脚本存在
     logger -t "$NAME" "DEBUG: reload_service triggered"
     # 检查是否启用
-    local isrunning=$(uci get cumt-login.@cumt_login[0].enabled 2>/dev/null || echo 0)
+    local isrunning=$(uci get cumt-net.@cumt_net[0].enabled 2>/dev/null || echo 0)
 
     if [ "$isrunning" == "0" ]; then
         logger -t "$NAME" "Service is disabled in configuration, stopping service"
@@ -85,6 +85,6 @@ reload_service() {
 }
 
 service_triggers() {
-    # 添加对 /etc/config/cumt-login 文件的监控
-    procd_add_reload_trigger cumt-login
+    # 添加对 /etc/config/cumt-net 文件的监控
+    procd_add_reload_trigger cumt-net
 }

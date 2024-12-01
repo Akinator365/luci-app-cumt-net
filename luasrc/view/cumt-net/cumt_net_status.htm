@@ -1,7 +1,7 @@
 <script type="text/javascript">//<![CDATA[
-XHR.poll(3, '<%=url([[admin]], [[services]], [[cumt-login]], [[status]])%>', null,
+XHR.poll(3, '<%=url([[admin]], [[services]], [[cumt-net]], [[status]])%>', null,
 	function(x, data) {
-		var tb = document.getElementById('cumt_login_status');
+		var tb = document.getElementById('cumt_net_status');
 		if (data && tb) {
 			if (data.running) {
 				tb.innerHTML = '<em><b><font color=green>服务正在运行</font></b></em>';
@@ -15,7 +15,7 @@ XHR.poll(3, '<%=url([[admin]], [[services]], [[cumt-login]], [[status]])%>', nul
 </script>
 <style>.mar-10 {margin-left: 50px; margin-right: 10px;}</style>
 <fieldset class="cbi-section">
-	<p id="cumt_login_status">
+	<p id="cumt_net_status">
 		<em>状态检测中……</em>
 	</p>
 </fieldset>

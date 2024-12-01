@@ -1,9 +1,9 @@
 local d = require "luci.dispatcher"
 
-m = Map("cumt-login", "规则配置")
-m.redirect = d.build_url("admin", "services", "cumt-login")
+m = Map("cumt-net", "规则配置")
+m.redirect = d.build_url("admin", "services", "cumt-net")
 
-s = m:section(NamedSection, arg[1], "config", "")
+s = m:section(NamedSection, arg[1], "passwall", "")
 s.addremove = false
 s.dynamic = false
 
@@ -16,28 +16,24 @@ o.placeholder = "备注"
 o.rmempty = true
 
 o = s:option(ListValue, "action", "操作")
-o:value("login", translate("login"))
-o:value("logout", translate("logout"))
+o:value("enable", translate("enable"))
+o:value("disable", translate("disable"))
 o.optional = false  -- 必填项
 o.rmempty = false
 
-o = s:option(Value, "account", "账号")
-o:depends("action", "login")
-o.optional = false  -- 必填项
-o.rmempty = false   -- 禁止为空
-
-password = s:option(Value, "password", translate("Password"))
-password:depends("action", "login")
-password.password = true  -- 将输入框设置为密码框
-password.optional = false  -- 必填项
-password.rmempty = false   -- 禁止为空
-
-o = s:option(ListValue, "isp", "运营商")
+o = s:option(ListValue, "node", "节点")
+o:depends("action", "enable")
 o:value("cumt", "校园网")
 o:value("unicom", "联通")
 o:value("cmcc", "移动")
 o:value("telecom", "电信")
-o:depends("action", "login")
+o.optional = false  -- 必填项
+o.rmempty = false   -- 禁止为空
+
+o = s:option(ListValue, "mode", "模式")
+o:depends("action", "enable")
+o:value("global", "全局")
+o:value("rule", "规则")
 o.optional = false  -- 必填项
 o.rmempty = false   -- 禁止为空
 

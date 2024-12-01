@@ -1,0 +1,11 @@
+{
+	"luci-app-cumt-login": {
+		"description": "Grant UCI access for luci-app-cumt-net",
+		"read": {
+			"uci": [ "cumtnet" ]
+		},
+		"write": {
+			"uci": [ "cumtnet" ]
+		}
+	}
+}
