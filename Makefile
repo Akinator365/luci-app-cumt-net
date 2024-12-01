@@ -10,8 +10,8 @@ LUCI_TITLE:=LuCI support for cumt-net
 LUCI_PKGARCH:=all
 
 PKG_NAME:=luci-app-cumt-net
-PKG_VERSION:=1.0
-PKG_RELEASE:=20241121
+PKG_VERSION:=1.1
+PKG_RELEASE:=20241201
 
 include $(TOPDIR)/feeds/luci/luci.mk
 
