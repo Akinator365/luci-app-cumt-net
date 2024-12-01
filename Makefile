@@ -1,6 +1,6 @@
-# Copyright (C) 2016 Openwrt.org
-# Copyright (C) 2020-2021 sirpdboy <herboy2008@gmail.com>
-# This is free software, licensed under the Apache License, Version 2.0 .
+# SPDX-License-Identifier: GPL-3.0-only
+#
+# This is free software, licensed under the GPL-3.0-only License.
 #
 
 include $(TOPDIR)/rules.mk
