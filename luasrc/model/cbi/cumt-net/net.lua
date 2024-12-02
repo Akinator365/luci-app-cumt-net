@@ -1,8 +1,8 @@
 local d = require "luci.dispatcher"
 local uci = require("luci.model.uci").cursor()
 
-mp = Map("cumt-net", translate("校园网自动登录"))
-mp.description = "定时自动连接校园网"
+mp = Map("cumt-net", translate("CUMT网络助手"))
+mp.description = "定时自动连接校园网及自动配置代理"
 
 -- 添加状态显示模板 定义了一个SimpleSection，只显示内容的页面部分（无交互功能）
 mp:section(SimpleSection).template  = "cumt-net/cumt_net_status"

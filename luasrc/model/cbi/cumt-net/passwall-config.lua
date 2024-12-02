@@ -115,7 +115,7 @@ for k, e in ipairs(get_valid_nodes()) do
 	nodes_table[#nodes_table + 1] = e
 end
 
-m = Map("cumt-net", "规则配置")
+m = Map("cumt-net", "Passwall代理规则配置")
 m.redirect = d.build_url("admin", "services", "cumt-net")
 
 s = m:section(NamedSection, arg[1], "passwall", "")

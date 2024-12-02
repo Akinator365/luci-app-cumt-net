@@ -1,6 +1,6 @@
 local d = require "luci.dispatcher"
 
-m = Map("cumt-net", "规则配置")
+m = Map("cumt-net", "自动登录规则配置")
 m.redirect = d.build_url("admin", "services", "cumt-net")
 
 s = m:section(NamedSection, arg[1], "login", "")
